@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Études‑Maroc — Étudier au Maroc</title>
-  <meta name="description" content="Études‑Maroc accompagne les étudiants étrangers pour candidater aux universités privées marocaines : rechercher des programmes, postuler et réserver une consultation." />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
+@extends('layouts.app')
+
+@section('title', 'Accueil — Études-Maroc')
+
+@push('styles')
+<style>
+:root{
       --brand:#C1272D; /* rouge marocain */
       --accent:#006233; /* vert marocain */
       --ink:#0f172a;
@@ -82,32 +78,11 @@
       .nav .menu-btn{display:inline-flex}
     }
     @media (min-width: 901px){ .nav .menu-btn{display:none} }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="container nav">
-      <a class="brand" href="#top">
-        <span class="brand-logo">ÉM</span>
-        <span>Études‑Maroc</span>
-      </a>
-      <nav class="nav-links" id="navLinks">
-        <a href="#features">Points forts</a>
-        <a href="#how">Processus</a>
-        <a href="#dashboard" id="navDashboard" class="hidden">Espace candidat</a>
-        <a href="#testimonials">Témoignages</a>
-        <a href="#faq">FAQ</a>
-        <a href="#contact">Contact</a>
-        <a class="btn btn-outline" href="#contact">Réserver une consultation</a>
-        <button id="authBtn" class="btn btn-ghost">Se connecter</button>
-        <div id="userMenu" class="hidden" style="display:flex;align-items:center;gap:8px">
-          <span class="muted">Bonjour, <b id="userFirst"></b></span>
-          <button id="logoutBtn" class="btn btn-outline">Déconnexion</button>
-        </div>
-      </nav>
-      <button class="btn btn-outline menu-btn" id="menuBtn" aria-label="Ouvrir le menu">☰</button>
-    </div>
-  </header>
+</style>
+@endpush
+
+@section('content')
+    <!-- Hero Section -->
 
   <main id="top">
     <section class="hero">
@@ -274,13 +249,6 @@
     </section>
   </main>
 
-  <footer>
-    <div class="container" style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
-      <p>© <span id="year"></span> Études‑Maroc. Tous droits réservés.</p>
-      <p>Fait avec <span aria-label="amour">❤️</span> • <a href="#top" class="muted" style="text-decoration:none">Haut de page</a></p>
-    </div>
-  </footer>
-
   <!-- Modal Auth -->
   <div id="authModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="authTitle">
     <div class="modal">
@@ -315,8 +283,13 @@
     </div>
   </div>
 
-  <script>
-    // ----- Menu mobile
+@endsection
+
+
+
+@push('scripts')
+<script>
+  // ----- Menu mobile
     const menuBtn = document.getElementById('menuBtn');
     const navLinks = document.getElementById('navLinks');
     menuBtn?.addEventListener('click', () => {
@@ -481,6 +454,6 @@
         if(!loadUser()){ e.preventDefault(); openModal('login'); }
       });
     });
-  </script>
-</body>
-</html>
+  
+</script>
+@endpush
