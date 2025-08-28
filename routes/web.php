@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -15,6 +16,9 @@ Route::get('/program', fn() => view('program'))->name('program');
 Route::get('/universities', fn() => view('universities'))->name('universities');
 /*Route::get('/resources', fn() => view('resources'))->name('resources');*/
 
+
+
+Route::get('/covers/{filename}', [BlogController::class, 'cover'])->name('covers.show');
 
 
 

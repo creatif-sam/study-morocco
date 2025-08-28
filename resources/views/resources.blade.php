@@ -4,7 +4,7 @@
 
 @push('styles')
 <style>
-/* Layout spacing */
+/* Page background & font */
 body {
     font-family: 'Inter', system-ui, sans-serif;
     background: #f9fafb;
@@ -25,6 +25,7 @@ body {
     width: 100%;
     max-width: 50%;
     object-fit: cover;
+    height: 300px;
 }
 .hero-body {
     flex: 1;
@@ -39,7 +40,7 @@ body {
 .hero-link { color: #006233; font-weight: 600; text-decoration: none; }
 .hero-link:hover { text-decoration: underline; }
 
-/* Grid of other posts */
+/* Grid for other posts */
 .grid {
     display: grid;
     gap: 24px;
@@ -63,10 +64,10 @@ body {
 .read-more { font-size: .85rem; font-weight: 600; color: #006233; margin-top: 12px; text-decoration: none; }
 .read-more:hover { text-decoration: underline; }
 
-/* Mobile responsiveness */
+/* Responsive */
 @media (max-width: 768px) {
     .hero { flex-direction: column; }
-    .hero img { max-width: 100%; height: 240px; }
+    .hero img { max-width: 100%; height: 220px; }
 }
 </style>
 @endpush
@@ -79,7 +80,7 @@ body {
         {{-- Latest Post Hero --}}
         @php $latest = $blogs->first(); @endphp
         <div class="hero">
-            <img src="{{ $latest->image ? asset('storage/blog-covers/'.$latest->image) : asset('images/default.jpg') }}" 
+            <img src="{{ $latest->image ? route('covers.show', $latest->image) : asset('images/default.jpg') }}" 
                  alt="{{ $latest->title }}">
             <div class="hero-body">
                 <div class="hero-meta">{{ $latest->created_at->format('d M Y') }}</div>
@@ -89,12 +90,12 @@ body {
             </div>
         </div>
 
-        {{-- Other posts in grid --}}
+        {{-- Other posts --}}
         @if($blogs->count() > 1)
             <div class="grid">
                 @foreach($blogs->skip(1) as $blog)
                     <div class="card">
-                        <img src="{{ $blog->image ? asset('storage/blog-covers/'.$blog->image) : asset('images/default.jpg') }}" 
+                        <img src="{{ $blog->image ? route('covers.show', $blog->image) : asset('images/default.jpg') }}" 
                              alt="{{ $blog->title }}">
                         <div class="card-body">
                             <div class="card-meta">{{ $blog->created_at->format('d M Y') }}</div>

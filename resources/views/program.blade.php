@@ -1,148 +1,168 @@
 {{-- resources/views/program.blade.php --}}
-<x-app-layout>
-    @push('styles')
-    <style>
-    :root{
-      --brand:#C1272D; /* rouge marocain */
-      --accent:#006233; /* vert marocain */
-      --ink:#0f172a;
-      --muted:#475569;
-      --bg:#0b1020;
-      --card:#111827ee;
-      --ring:0 0 0 3px color-mix(in srgb, var(--accent) 40%, transparent);
-    }
-    body{font-family:Inter,system-ui;background:
-      radial-gradient(1000px 600px at 80% -10%, #ffe5e5 0%, transparent 60%),
-      radial-gradient(800px 500px at -10% 10%, #e9f7ef 0%, transparent 55%),
-      linear-gradient(180deg,#ffffff 0%, #f7fafc 100%);
-    }
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Études-Maroc — Programmes</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <style>
+    body{margin:0;font-family:Inter,system-ui;background:#fff;color:#0f172a}
     .container{max-width:1100px;margin:auto;padding:0 20px}
 
     /* Hero */
-    .hero{padding:64px 0 32px;text-align:center}
-    .hero h1{font-size:clamp(32px,4.5vw,52px);color:var(--ink);margin:0}
+    .hero-program {
+      background: linear-gradient(90deg,#fff4f4,#f9fff0);
+      padding:40px 0 30px;
+      margin-bottom:20px;
+      text-align:center;
+    }
+    .hero-program h1{font-size:clamp(26px,4vw,40px);margin:0;font-weight:800}
 
     /* Filter box */
-    .filter-box{background:white;border:1px solid #e5e7eb;border-radius:18px;padding:20px;box-shadow:0 6px 18px rgba(2,8,23,.06);margin-top:-20px;position:relative;z-index:10}
+    .filter-box{
+      background:white;border:1px solid #e5e7eb;border-radius:10px;
+      padding:16px;margin-top:20px;
+      box-shadow:0 2px 6px rgba(0,0,0,0.05);
+    }
     .filter-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-    .input, select{padding:12px;border-radius:10px;border:1px solid #d1d5db;background:#fff;font-size:14px;width:100%}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 14px;border-radius:12px;border:1px solid transparent;font-weight:700;cursor:pointer;text-decoration:none}
-    .btn-primary{background:var(--brand);color:white;box-shadow:0 6px 16px rgba(193,39,45,.25)}
-    .btn-primary:hover{background:#a81f24}
-    .btn-outline{border:1px solid var(--accent);color:var(--accent);background:white}
+    .filter-box select,.filter-box input{
+      padding:10px;border-radius:6px;border:1px solid #d1d5db;font-size:14px;width:100%
+    }
+    .filter-box button{
+      padding:10px 16px;border-radius:6px;border:none;
+      background:#C1272D;color:white;font-weight:600;cursor:pointer
+    }
+    .filter-box button:hover{background:#a51e24}
 
     /* Layout */
-    .main-grid{display:grid;grid-template-columns:260px 1fr;gap:28px;margin-top:40px}
+    .main-grid{display:grid;grid-template-columns:260px 1fr;gap:28px;margin-top:30px}
     @media(max-width:900px){.main-grid{grid-template-columns:1fr}}
 
     /* Sidebar */
-    .sidebar{background:white;border:1px solid #e5e7eb;border-radius:16px;padding:20px;box-shadow:0 6px 18px rgba(2,8,23,.05)}
-    .sidebar h2{font-size:18px;margin:0 0 12px;color:var(--ink)}
-    .sidebar label{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);margin-bottom:8px}
+    .sidebar{background:white;border:1px solid #e5e7eb;border-radius:10px;padding:20px;box-shadow:0 2px 6px rgba(0,0,0,0.05)}
+    .sidebar h2{font-size:18px;margin:0 0 12px}
+    .sidebar label{display:flex;align-items:center;gap:8px;font-size:14px;color:#475569;margin-bottom:8px}
 
     /* Results */
     .results-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-    .results-header h2{margin:0;font-size:20px;color:var(--ink)}
-    .results-header span{color:var(--muted);font-size:14px}
-    .grid-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
-    .card{background:white;border:1px solid #e5e7eb;border-radius:16px;padding:20px;box-shadow:0 6px 18px rgba(2,8,23,.05);transition:transform .2s}
-    .card:hover{transform:translateY(-4px)}
-    .card h3{margin:0 0 8px;font-size:17px;color:var(--ink)}
-    .card .uni{color:var(--ink);font-weight:500}
-    .card .location{color:var(--muted);font-size:14px;margin-top:2px}
-    .card .btn{margin-top:12px;font-size:14px}
+    .results-header h2{margin:0;font-size:20px;font-weight:700}
+    .results-header span{color:#475569;font-size:14px}
+    .grid-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
+    .card{
+      border:1px solid #e5e7eb;border-radius:12px;
+      padding:16px;background:white;
+      box-shadow:0 4px 10px rgba(0,0,0,0.03);
+      transition:box-shadow .2s;
+    }
+    .card:hover{box-shadow:0 6px 16px rgba(0,0,0,0.08);}
+    .card h3{margin:0 0 6px;font-size:16px;font-weight:700}
+    .card .uni{font-weight:500;color:#0f172a}
+    .card .location{font-size:14px;color:#475569}
+    .card button{
+      margin-top:10px;padding:8px 14px;border:none;
+      border-radius:6px;background:#C1272D;color:white;
+      font-size:14px;font-weight:600;cursor:pointer
+    }
+    .card button:hover{background:#a51e24}
 
     /* Pagination */
     .pagination{display:flex;justify-content:center;gap:8px;margin-top:30px}
-    .pagination button{padding:8px 14px;border-radius:10px;background:#f1f5f9;border:none;font-weight:600;cursor:pointer}
-    .pagination button.active{background:var(--brand);color:white}
-    </style>
-    @endpush
+    .pagination button{
+      padding:8px 14px;border-radius:6px;background:#f1f5f9;
+      border:none;font-weight:600;cursor:pointer
+    }
+    .pagination button.active{background:#C1272D;color:white}
+  </style>
+</head>
+<body>
 
-    <!-- Hero -->
-    <section class="hero">
-      <div class="container">
-        <h1>Trouver un programme</h1>
-      </div>
-    </section>
+  @include('partials.nav')
 
-    <!-- Filters -->
+  <!-- Hero -->
+  <section class="hero-program">
     <div class="container">
-      <div class="filter-box">
-        <form>
-          <div class="filter-grid">
-            <select><option>Diplôme</option><option>Licence</option><option>Master</option><option>Ingénierie</option><option>Doctorat</option></select>
-            <select><option>Langue</option><option>Français</option><option>Anglais</option><option>Bilingue</option></select>
-            <select><option>Domaine d’études</option><option>Informatique</option><option>Commerce</option><option>Santé</option><option>Architecture</option><option>Agriculture</option></select>
-            <input class="input" type="search" placeholder="Mot-clé ou université">
-          </div>
-          <div style="margin-top:12px;text-align:right">
-            <button class="btn btn-primary" type="submit">Rechercher</button>
-          </div>
-        </form>
-      </div>
+      <h1>Trouver un programme</h1>
+      <form class="filter-box" id="filterForm">
+        <div class="filter-grid">
+          <select><option>Diplôme</option><option>Licence</option><option>Master</option><option>Ingénierie</option><option>Doctorat</option></select>
+          <select><option>Langue</option><option>Français</option><option>Anglais</option><option>Bilingue</option></select>
+          <select><option>Domaine d’études</option><option>Informatique</option><option>Commerce</option><option>Santé</option><option>Architecture</option><option>Agriculture</option></select>
+          <input type="text" id="searchInput" placeholder="Mot-clé ou université">
+        </div>
+        <div style="margin-top:12px;text-align:right">
+          <button type="submit">Rechercher</button>
+        </div>
+      </form>
     </div>
+  </section>
 
-    <!-- Main Grid -->
-    <div class="container main-grid">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <h2>Autres filtres</h2>
-        <label><input type="checkbox"> Casablanca</label>
-        <label><input type="checkbox"> Rabat</label>
-        <label><input type="checkbox"> Marrakech</label>
-        <label><input type="checkbox"> Fès</label>
-      </aside>
+  <main class="container main-grid">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Autres filtres</h2>
+      <label><input type="checkbox"> Casablanca</label>
+      <label><input type="checkbox"> Rabat</label>
+      <label><input type="checkbox"> Marrakech</label>
+      <label><input type="checkbox"> Fès</label>
+    </aside>
 
-      <!-- Results -->
-      <div>
-        <div class="results-header">
-          <h2>Résultats de la recherche</h2>
-          <span>17589 programmes trouvés</span>
+    <!-- Results -->
+    <div>
+      <div class="results-header">
+        <h2>Résultats de la recherche</h2>
+        <span>17589 programmes trouvés</span>
+      </div>
+      <div class="grid-cards">
+        <div class="card">
+          <h3>Licence en Informatique</h3>
+          <p class="uni">Université Mohammed V</p>
+          <p class="location">Rabat</p>
+          <button>Voir plus</button>
         </div>
-        <div class="grid-cards">
-          <div class="card">
-            <h3>Licence en Informatique</h3>
-            <p class="uni">Université Mohammed V</p>
-            <p class="location">Rabat</p>
-            <button class="btn btn-primary">Voir plus</button>
-          </div>
-          <div class="card">
-            <h3>Master en Commerce International</h3>
-            <p class="uni">Université Hassan II</p>
-            <p class="location">Casablanca</p>
-            <button class="btn btn-primary">Voir plus</button>
-          </div>
-          <div class="card">
-            <h3>Doctorat en Santé Publique</h3>
-            <p class="uni">Université Cadi Ayyad</p>
-            <p class="location">Marrakech</p>
-            <button class="btn btn-primary">Voir plus</button>
-          </div>
-          <div class="card">
-            <h3>Ingénierie en Architecture</h3>
-            <p class="uni">Université Al Akhawayn</p>
-            <p class="location">Ifrane</p>
-            <button class="btn btn-primary">Voir plus</button>
-          </div>
+        <div class="card">
+          <h3>Master en Commerce International</h3>
+          <p class="uni">Université Hassan II</p>
+          <p class="location">Casablanca</p>
+          <button>Voir plus</button>
         </div>
-
-        <!-- Pagination -->
-        <div class="pagination">
-          <button>Précédent</button>
-          <button class="active">1</button>
-          <button>2</button>
-          <button>3</button>
-          <button>Suivant</button>
+        <div class="card">
+          <h3>Doctorat en Santé Publique</h3>
+          <p class="uni">Université Cadi Ayyad</p>
+          <p class="location">Marrakech</p>
+          <button>Voir plus</button>
+        </div>
+        <div class="card">
+          <h3>Ingénierie en Architecture</h3>
+          <p class="uni">Université Al Akhawayn</p>
+          <p class="location">Ifrane</p>
+          <button>Voir plus</button>
         </div>
       </div>
-    </div>
 
-    @push('scripts')
-    <script>
-      document.querySelectorAll('.card .btn').forEach(btn=>{
-        btn.addEventListener('click',()=>alert("Détails à venir..."));
+      <!-- Pagination -->
+      <div class="pagination">
+        <button>Précédent</button>
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>Suivant</button>
+      </div>
+    </div>
+  </main>
+
+  @include('partials.footer')
+
+  <script>
+    // Demo filter
+    const form=document.getElementById('filterForm');
+    const input=document.getElementById('searchInput');
+    form?.addEventListener('submit',(e)=>{
+      e.preventDefault();
+      const q=input.value.toLowerCase();
+      document.querySelectorAll('.card').forEach(card=>{
+        card.style.display = card.innerText.toLowerCase().includes(q) ? 'block':'none';
       });
-    </script>
-    @endpush
-</x-app-layout>
+    });
+  </script>
+</body>
+</html>
