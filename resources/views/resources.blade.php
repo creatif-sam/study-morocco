@@ -1,121 +1,113 @@
-{{-- resources/views/resources.blade.php --}}
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Études-Maroc — Ressources</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-  <style>
-    body{margin:0;font-family:Inter,system-ui;background:#fff;color:#0f172a}
-    .container{max-width:1100px;margin:auto;padding:0 20px}
+@extends('layouts.app')
 
-    /* Hero */
-    .hero-res {
-      background: linear-gradient(90deg,#fff4f4,#fff9ef);
-      padding:40px 0 20px;
-      margin-bottom:30px;
-    }
-    .hero-res h1{font-size:clamp(26px,4vw,40px);margin:0;font-weight:800}
+@section('title', 'Ressources • Études Maroc')
 
-    .filter { margin-top:12px; }
-    .filter select {
-      padding:10px 12px;border-radius:6px;border:1px solid #d1d5db;font-size:14px
-    }
+@push('styles')
+<style>
+/* Layout spacing */
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #f9fafb;
+    color: #0f172a;
+}
 
-    /* Featured article */
-    .featured {
-      display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center;
-      margin-bottom:40px;
-    }
-    .featured img { width:100%;border-radius:12px; }
-    .featured h2 { font-size:20px;margin:6px 0;font-weight:700 }
-    .featured p { font-size:14px;color:#475569; }
+/* Hero (latest article) */
+.hero {
+    display: flex;
+    flex-wrap: wrap;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0,0,0,.08);
+    margin-bottom: 40px;
+}
+.hero img {
+    width: 100%;
+    max-width: 50%;
+    object-fit: cover;
+}
+.hero-body {
+    flex: 1;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.hero-meta { font-size: .85rem; color: #475569; margin-bottom: 8px; }
+.hero-title { font-size: 1.8rem; font-weight: 800; color: #C1272D; margin-bottom: 14px; }
+.hero-text { font-size: 1rem; color: #0f172a; line-height: 1.6; margin-bottom: 18px; }
+.hero-link { color: #006233; font-weight: 600; text-decoration: none; }
+.hero-link:hover { text-decoration: underline; }
 
-    /* Articles grid */
-    .articles { display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px; }
-    .article {
-      border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;background:white;
-      box-shadow:0 4px 10px rgba(0,0,0,0.03);transition:box-shadow .2s;
-    }
-    .article:hover { box-shadow:0 6px 16px rgba(0,0,0,0.08); }
-    .article img { width:100%;height:180px;object-fit:cover; }
-    .article .content { padding:14px; }
-    .article .tags { font-size:12px;color:#C1272D;font-weight:600;margin-bottom:6px; }
-    .article h3 { margin:0 0 6px;font-size:16px;font-weight:700; }
-    .article p { margin:0;font-size:14px;color:#475569; }
-    .article a { text-decoration:none;color:inherit;display:block;height:100% }
+/* Grid of other posts */
+.grid {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.08);
+    overflow: hidden;
+    transition: .3s;
+    display: flex;
+    flex-direction: column;
+}
+.card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,.12); }
+.card img { width: 100%; height: 160px; object-fit: cover; }
+.card-body { padding: 16px; flex-grow: 1; display: flex; flex-direction: column; }
+.card-meta { font-size: .8rem; color: #475569; margin-bottom: 4px; }
+.card-title { font-size: 1rem; font-weight: 700; color: #C1272D; margin-bottom: 10px; }
+.card-text { font-size: .9rem; color: #0f172a; flex-grow: 1; line-height: 1.5; }
+.read-more { font-size: .85rem; font-weight: 600; color: #006233; margin-top: 12px; text-decoration: none; }
+.read-more:hover { text-decoration: underline; }
 
-    @media(max-width:900px){
-      .featured { grid-template-columns:1fr; }
-    }
-  </style>
-</head>
-<body>
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .hero { flex-direction: column; }
+    .hero img { max-width: 100%; height: 240px; }
+}
+</style>
+@endpush
 
-  @include('partials.nav')
+@section('content')
+<div class="py-10 container mx-auto px-4">
+    <h1 class="text-3xl font-bold text-[#C1272D] mb-8">Ressources & Articles</h1>
 
-  <section class="hero-res">
-    <div class="container">
-      <h1>Ressources</h1>
-      <div class="filter">
-        <select>
-          <option>Toutes les ressources</option>
-          <option>Admissions</option>
-          <option>Vie étudiante</option>
-          <option>Santé mentale</option>
-          <option>Logement</option>
-        </select>
-      </div>
-    </div>
-  </section>
+    @if($blogs->count())
+        {{-- Latest Post Hero --}}
+        @php $latest = $blogs->first(); @endphp
+        <div class="hero">
+            <img src="{{ $latest->image ? asset('storage/blog-covers/'.$latest->image) : asset('images/default.jpg') }}" 
+                 alt="{{ $latest->title }}">
+            <div class="hero-body">
+                <div class="hero-meta">{{ $latest->created_at->format('d M Y') }}</div>
+                <h2 class="hero-title">{{ $latest->title }}</h2>
+                <p class="hero-text">{{ Str::limit(strip_tags($latest->content), 200) }}</p>
+                <a href="{{ route('resources.show', $latest->slug) }}" class="hero-link">Lire la suite →</a>
+            </div>
+        </div>
 
-  <main class="container">
-    {{-- Featured article --}}
-    <div class="featured">
-      <img src="/images/resources/featured.jpg" alt="Article vedette">
-      <div>
-        <div class="tags">Rentrée des classes • Santé mentale • Vie étudiante</div>
-        <h2>Votre passage au secondaire a été solitaire ? Voici comment nouer des liens à l’université</h2>
-        <p>À mes débuts à l’université, je souhaitais secrètement un nouveau départ. Ce n’est pas que mon passage à l’école secondaire ait été marqué par des drames, simplement, je ne trouvais pas ma place…</p>
-      </div>
-    </div>
-
-    {{-- Articles grid --}}
-    <div class="articles">
-      <div class="article">
-        <a href="#">
-          <img src="/images/resources/colocation.jpg" alt="">
-          <div class="content">
-            <div class="tags">Logement • Rentrée des classes</div>
-            <h3>Petit guide de survie en colocation à l’université</h3>
-            <p>La vie en colocation n’est pas toujours facile, mais voici quelques conseils pour bien commencer.</p>
-          </div>
-        </a>
-      </div>
-      <div class="article">
-        <a href="#">
-          <img src="/images/resources/orientation.jpg" alt="">
-          <div class="content">
-            <div class="tags">Aide aux étudiants étrangers • Rentrée</div>
-            <h3>Vous entrez à l’université au Maroc ? Voici à quoi vous attendre pendant l’orientation</h3>
-            <p>L’orientation universitaire est une étape clé, découvrez comment bien la vivre.</p>
-          </div>
-        </a>
-      </div>
-      <div class="article">
-        <a href="#">
-          <img src="/images/resources/boussole.jpg" alt="">
-          <div class="content">
-            <div class="tags">Perfectionnement • Santé mentale</div>
-            <h3>À la recherche de votre boussole intérieure ? Voici comment trouver votre voie</h3>
-            <p>Un témoignage inspirant sur la recherche de sens à l’université.</p>
-          </div>
-        </a>
-      </div>
-    </div>
-  </main>
-
-  @include('partials.footer')
-
-</body>
-</html>
+        {{-- Other posts in grid --}}
+        @if($blogs->count() > 1)
+            <div class="grid">
+                @foreach($blogs->skip(1) as $blog)
+                    <div class="card">
+                        <img src="{{ $blog->image ? asset('storage/blog-covers/'.$blog->image) : asset('images/default.jpg') }}" 
+                             alt="{{ $blog->title }}">
+                        <div class="card-body">
+                            <div class="card-meta">{{ $blog->created_at->format('d M Y') }}</div>
+                            <h2 class="card-title">{{ $blog->title }}</h2>
+                            <p class="card-text">{{ Str::limit(strip_tags($blog->content), 120) }}</p>
+                            <a href="{{ route('resources.show', $blog->slug) }}" class="read-more">Lire la suite →</a>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    @else
+        <p class="text-gray-600">Aucun article disponible pour le moment.</p>
+    @endif
+</div>
+@endsection

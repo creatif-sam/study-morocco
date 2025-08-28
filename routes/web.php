@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BlogController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -12,8 +13,13 @@ Route::get('/', function () {
 
 Route::get('/program', fn() => view('program'))->name('program');
 Route::get('/universities', fn() => view('universities'))->name('universities');
-Route::get('/resources', fn() => view('resources'))->name('resources');
+/*Route::get('/resources', fn() => view('resources'))->name('resources');*/
 
+
+
+
+Route::get('/resources', [BlogController::class, 'index'])->name('resources.index');
+Route::get('/resources/{slug}', [BlogController::class, 'show'])->name('resources.show');
 
 
 Route::get('/dashboard', function () {
