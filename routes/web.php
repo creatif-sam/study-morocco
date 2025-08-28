@@ -7,17 +7,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/program', function () {
-    return view('program');
-})->name('program.index');
 
-Route::get('/universities', function () {
-    return view('universities');
-})->name('university.index');
 
-Route::get('/resources', function () {
-    return view('resources');
-})->name('resource.index');
+
+Route::get('/program', fn() => view('program'))->name('program');
+Route::get('/universities', fn() => view('universities'))->name('universities');
+Route::get('/resources', fn() => view('resources'))->name('resources');
+
 
 
 Route::get('/dashboard', function () {

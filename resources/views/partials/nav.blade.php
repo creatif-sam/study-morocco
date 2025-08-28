@@ -51,10 +51,10 @@
 
     {{-- Center: Nav links --}}
     <nav class="nav-links" id="navLinks">
-      <a href="#programmes" class="nav-item">Programmes</a>
-      <a href="#etablissements" class="nav-item">Établissements</a>
+      <a href="{{ route('program') }}" class="nav-item">Programmes</a>
+      <a href="{{ route('universities') }}" class="nav-item">Établissements</a>
       <a href="#bourses" class="nav-item">Bourses d’études</a>
-      <a href="#ressources" class="nav-item active">Ressources</a>
+      <a href="{{ route('resources') }}" class="nav-item active">Ressources</a>
     </nav>
 
     {{-- Right: Language + User + Mobile --}}
